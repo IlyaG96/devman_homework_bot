@@ -63,6 +63,7 @@ def main():
     tg_token = os.getenv("TG_TOKEN")
     chat_id = os.getenv("CHAT_ID")
     bot = telegram.Bot(token=tg_token)
+
     while True:
         search_for_responses(devman_token, bot, chat_id)
 
