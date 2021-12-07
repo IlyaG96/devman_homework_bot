@@ -19,9 +19,10 @@ def send_request_devman(devman_token, payload):
 
 def process_devman_response(response):
     about_lesson = 0
-    lesson_title = response.get("new_attempts")[about_lesson].get("lesson_title")
-    is_negative = response.get("new_attempts")[about_lesson].get("is_negative")
-    lesson_url = response.get("new_attempts")[about_lesson].get("lesson_url")
+    new_attempts = response.get("new_attempts")
+    lesson_title = new_attempts[about_lesson].get("lesson_title")
+    is_negative = new_attempts[about_lesson].get("is_negative")
+    lesson_url = new_attempts[about_lesson].get("lesson_url")
 
     if is_negative:
         return dedent(f"""
