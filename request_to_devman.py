@@ -39,9 +39,9 @@ def process_devman_response(response):
 
 def search_for_responses(devman_token, bot, chat_id):
 
-    try:
-        payload = None
-        while True:
+    payload = None
+    while True:
+        try:
             response = send_request_devman(devman_token, payload)
             timestamp = response.get("last_attempt_timestamp") or response.get("timestamp_to_request")
             payload = {"timestamp": timestamp}
@@ -49,12 +49,12 @@ def search_for_responses(devman_token, bot, chat_id):
                 message = process_devman_response(response)
                 bot.send_message(text=message, chat_id=chat_id)
 
-    except requests.exceptions.ReadTimeout:
-        time.sleep(30)
-        search_for_responses(devman_token, bot, chat_id)
-    except requests.exceptions.ConnectionError:
-        time.sleep(60)
-        search_for_responses(devman_token, bot, chat_id)
+        except requests.exceptions.ReadTimeout:
+            time.sleep(30)
+            pass
+        except requests.exceptions.ConnectionError:
+            time.sleep(60)
+            pass
 
 
 def main():
@@ -64,7 +64,6 @@ def main():
     tg_token = os.getenv("TG_TOKEN")
     chat_id = os.getenv("CHAT_ID")
     bot = telegram.Bot(token=tg_token)
-
     search_for_responses(devman_token, bot, chat_id)
 
 
