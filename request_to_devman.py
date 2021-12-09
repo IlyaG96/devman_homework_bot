@@ -21,10 +21,10 @@ def process_devman_response(response):
 
     lesson_details = response.get("new_attempts")
 
-    for num, new_attempts in enumerate(lesson_details):
-        lesson_title = new_attempts.get("lesson_title")
-        is_negative = new_attempts.get("is_negative")
-        lesson_url = new_attempts.get("lesson_url")
+    for attempt in lesson_details:
+        lesson_title = attempt.get("lesson_title")
+        is_negative = attempt.get("is_negative")
+        lesson_url = attempt.get("lesson_url")
 
     if is_negative:
         return dedent(f"""
