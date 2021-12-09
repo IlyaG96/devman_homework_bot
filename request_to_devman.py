@@ -50,10 +50,11 @@ def search_for_responses(devman_token, bot, chat_id):
                 bot.send_message(text=message, chat_id=chat_id)
 
     except requests.exceptions.ReadTimeout:
-        pass
+        time.sleep(30)
+        search_for_responses(devman_token, bot, chat_id)
     except requests.exceptions.ConnectionError:
         time.sleep(60)
-        pass
+        search_for_responses(devman_token, bot, chat_id)
 
 
 def main():
@@ -64,8 +65,7 @@ def main():
     chat_id = os.getenv("CHAT_ID")
     bot = telegram.Bot(token=tg_token)
 
-    while True:
-        search_for_responses(devman_token, bot, chat_id)
+    search_for_responses(devman_token, bot, chat_id)
 
 
 if __name__ == '__main__':
