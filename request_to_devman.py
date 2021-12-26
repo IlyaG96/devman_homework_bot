@@ -26,15 +26,15 @@ def process_devman_response(response):
         is_negative = attempt.get("is_negative")
         lesson_url = attempt.get("lesson_url")
 
-    if is_negative:
+        if is_negative:
+            return dedent(f"""
+                        Ваш урок '{lesson_title}' проверен. К сожалению, есть ошибки.
+                        Ссылка для перехода к уроку: {lesson_url}
+                        """)
         return dedent(f"""
-                    Ваш урок '{lesson_title}' проверен. К сожалению, есть ошибки.
+                    Ваш урок '{lesson_title}' проверен. Ошибок нет! Поздравляем!
                     Ссылка для перехода к уроку: {lesson_url}
                     """)
-    return dedent(f"""
-                Ваш урок '{lesson_title}' проверен. Ошибок нет! Поздравляем!
-                Ссылка для перехода к уроку: {lesson_url}
-                """)
 
 
 def search_for_responses(devman_token, bot, chat_id):
