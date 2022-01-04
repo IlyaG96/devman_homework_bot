@@ -7,7 +7,6 @@ import os
 
 import logging
 logging.basicConfig(level=logging.INFO)
-logging.info('Бот запущен, все идет по плану>')
 
 
 def send_request_devman(devman_token, payload):
@@ -45,7 +44,7 @@ def search_for_responses(devman_token, bot, chat_id):
 
     payload = None
     while True:
-        logging.info('Бот запущен, все идет по плану>')
+        logging.info('Бот запущен')
         try:
             response = send_request_devman(devman_token, payload)
             timestamp = response.get("last_attempt_timestamp") or response.get("timestamp_to_request")
@@ -54,22 +53,28 @@ def search_for_responses(devman_token, bot, chat_id):
                 message = process_devman_response(response)
                 bot.send_message(text=message, chat_id=chat_id)
 
-        except requests.exceptions.ReadTimeout:
+        except requests.exceptions.ReadTimeout as read_timeout_ex:
+            logging.warning(read_timeout_ex)
             time.sleep(30)
-            pass
-        except requests.exceptions.ConnectionError:
+        except requests.exceptions.ConnectionError as conn_err_ex:
+            logging.warning(conn_err_ex)
             time.sleep(60)
-            pass
+        logging.info("Ответ в течение 90 секунд не получен, перезапускаю бота")
 
 
 def main():
-
-    load_dotenv()
-    devman_token = os.getenv("DEVMAN_TOKEN")
-    tg_token = os.getenv("TG_TOKEN")
-    chat_id = os.getenv("CHAT_ID")
-    bot = telegram.Bot(token=tg_token)
-    search_for_responses(devman_token, bot, chat_id)
+    while True:
+        load_dotenv()
+        devman_token = os.getenv("DEVMAN_TOKEN")
+        tg_token = os.getenv("TG_TOKEN")
+        chat_id = os.getenv("CHAT_ID")
+        bot = telegram.Bot(token=tg_token)
+        try:
+            search_for_responses(devman_token, bot, chat_id)
+        except Exception as exception:
+            exception_msg = exception.args[0]
+            bot.send_message(text=exception_msg, chat_id=chat_id)
+            time.sleep(60)
 
 
 if __name__ == '__main__':
