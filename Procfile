@@ -1,1 +1,1 @@
-bot: python3 notification_bot.py
+bot: python3 request_to_devman.py
