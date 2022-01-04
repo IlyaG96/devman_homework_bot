@@ -1,1 +1,1 @@
-bot: Python3 notification_bot.py
+bot: python3 notification_bot.py
