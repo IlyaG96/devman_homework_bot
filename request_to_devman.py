@@ -5,6 +5,10 @@ import telegram
 import time
 import os
 
+import logging
+logging.basicConfig(level=logging.INFO)
+logging.info('Бот запущен, все идет по плану>')
+
 
 def send_request_devman(devman_token, payload):
     url = "https://dvmn.org/api/long_polling/"
@@ -41,6 +45,7 @@ def search_for_responses(devman_token, bot, chat_id):
 
     payload = None
     while True:
+        logging.info('Бот запущен, все идет по плану>')
         try:
             response = send_request_devman(devman_token, payload)
             timestamp = response.get("last_attempt_timestamp") or response.get("timestamp_to_request")
