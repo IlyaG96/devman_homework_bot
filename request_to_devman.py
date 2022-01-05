@@ -19,7 +19,6 @@ class TelegramLogsHandler(logging.Handler):
         self.tg_bot.send_message(chat_id=self.chat_id, text=log_entry)
 
 
-
 def send_request_devman(devman_token, payload):
     url = "https://dvmn.org/api/long_polling/"
     headers = {
