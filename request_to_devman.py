@@ -4,9 +4,20 @@ import requests
 import telegram
 import time
 import os
-
 import logging
-logging.basicConfig(level=logging.INFO)
+
+
+class TelegramLogsHandler(logging.Handler):
+
+    def __init__(self, tg_bot, chat_id):
+        super().__init__()
+        self.chat_id = chat_id
+        self.tg_bot = tg_bot
+
+    def emit(self, record):
+        log_entry = self.format(record)
+        self.tg_bot.send_message(chat_id=self.chat_id, text=log_entry)
+
 
 
 def send_request_devman(devman_token, payload):
@@ -55,26 +66,30 @@ def search_for_responses(devman_token, bot, chat_id):
 
         except requests.exceptions.ReadTimeout as read_timeout_ex:
             logging.warning(read_timeout_ex)
-            time.sleep(30)
+            time.sleep(60)
         except requests.exceptions.ConnectionError as conn_err_ex:
             logging.warning(conn_err_ex)
-            time.sleep(60)
-        logging.info("Ответ в течение 90 секунд не получен, перезапускаю бота")
+            time.sleep(120)
+        logging.info("Ответ в течение 90 секунд не получен, повторяю запрос к API devman.org")
 
 
 def main():
+
     while True:
         load_dotenv()
         devman_token = os.getenv("DEVMAN_TOKEN")
         tg_token = os.getenv("TG_TOKEN")
         chat_id = os.getenv("CHAT_ID")
+        logger = logging.getLogger('Logger')
+        logger.setLevel(logging.WARNING)
         bot = telegram.Bot(token=tg_token)
+        logger.addHandler(TelegramLogsHandler(bot, chat_id))
+
         try:
             search_for_responses(devman_token, bot, chat_id)
         except Exception as exception:
-            exception_msg = exception.args[0]
-            bot.send_message(text=exception_msg, chat_id=chat_id)
-            time.sleep(60)
+            logger.error(exception, exc_info=True)
+        time.sleep(120)
 
 
 if __name__ == '__main__':

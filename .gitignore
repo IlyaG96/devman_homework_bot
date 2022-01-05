@@ -4,3 +4,4 @@ __pycache__
 .idea
 testcase.py
 notification_bot.py
+*.log
