@@ -83,7 +83,6 @@ def main():
         logger.setLevel(logging.WARNING)
         bot = telegram.Bot(token=tg_token)
         logger.addHandler(TelegramLogsHandler(bot, chat_id))
-
         try:
             search_for_responses(devman_token, bot, chat_id)
         except Exception as exception:
