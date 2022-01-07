@@ -54,7 +54,6 @@ def search_for_responses(devman_token, bot, chat_id, logger):
 
     payload = None
     while True:
-        logging.info('Бот запущен')
         try:
             response = send_request_devman(devman_token, payload)
             timestamp = response.get("last_attempt_timestamp") or response.get("timestamp_to_request")
@@ -64,12 +63,11 @@ def search_for_responses(devman_token, bot, chat_id, logger):
                 bot.send_message(text=message, chat_id=chat_id)
 
         except requests.exceptions.ConnectionError as conn_err_ex:
-            logger.warning(conn_err_ex)
+            logging.warning(conn_err_ex)
             time.sleep(120)
         except Exception as exception:
             logger.error(exception, exc_info=True)
             time.sleep(120)
-        logging.info("Ответ в течение 90 секунд не получен, повторяю запрос к API devman.org")
 
 
 def main():
