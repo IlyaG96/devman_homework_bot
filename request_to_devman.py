@@ -63,7 +63,7 @@ def search_for_responses(devman_token, bot, chat_id, logger):
                 bot.send_message(text=message, chat_id=chat_id)
 
         except requests.exceptions.ConnectionError as conn_err_ex:
-            logging.warning(conn_err_ex)
+            logger.warning(conn_err_ex)
             time.sleep(120)
         except Exception as exception:
             logger.error(exception, exc_info=True)
