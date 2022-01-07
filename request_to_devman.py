@@ -50,7 +50,7 @@ def process_devman_response(response):
                     """)
 
 
-def search_for_responses(devman_token, bot, chat_id):
+def search_for_responses(devman_token, bot, chat_id, logger):
 
     payload = None
     while True:
@@ -69,25 +69,23 @@ def search_for_responses(devman_token, bot, chat_id):
         except requests.exceptions.ConnectionError as conn_err_ex:
             logging.warning(conn_err_ex)
             time.sleep(120)
+        except Exception as exception:
+            logger.error(exception, exc_info=True)
+            time.sleep(120)
         logging.info("Ответ в течение 90 секунд не получен, повторяю запрос к API devman.org")
 
 
 def main():
 
-    while True:
-        load_dotenv()
-        devman_token = os.getenv("DEVMAN_TOKEN")
-        tg_token = os.getenv("TG_TOKEN")
-        chat_id = os.getenv("CHAT_ID")
-        logger = logging.getLogger('Logger')
-        logger.setLevel(logging.WARNING)
-        bot = telegram.Bot(token=tg_token)
-        logger.addHandler(TelegramLogsHandler(bot, chat_id))
-        try:
-            search_for_responses(devman_token, bot, chat_id)
-        except Exception as exception:
-            logger.error(exception, exc_info=True)
-        time.sleep(120)
+    load_dotenv()
+    devman_token = os.getenv("DEVMAN_TOKEN")
+    tg_token = os.getenv("TG_TOKEN")
+    chat_id = os.getenv("CHAT_ID")
+    logger = logging.getLogger('Logger')
+    logger.setLevel(logging.WARNING)
+    bot = telegram.Bot(token=tg_token)
+    logger.addHandler(TelegramLogsHandler(bot, chat_id))
+    search_for_responses(devman_token, bot, chat_id, logger)
 
 
 if __name__ == '__main__':
