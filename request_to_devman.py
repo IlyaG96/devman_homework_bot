@@ -63,11 +63,8 @@ def search_for_responses(devman_token, bot, chat_id, logger):
                 message = process_devman_response(response)
                 bot.send_message(text=message, chat_id=chat_id)
 
-        except requests.exceptions.ReadTimeout as read_timeout_ex:
-            logging.warning(read_timeout_ex)
-            time.sleep(60)
         except requests.exceptions.ConnectionError as conn_err_ex:
-            logging.warning(conn_err_ex)
+            logger.warning(conn_err_ex)
             time.sleep(120)
         except Exception as exception:
             logger.error(exception, exc_info=True)
