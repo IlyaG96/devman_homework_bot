@@ -1,3 +1,5 @@
 build:
   docker:
     web: Dockerfile
+  run:
+    web: python /usr/src/devman-homework/request_to_devman.py
