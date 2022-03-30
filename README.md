@@ -68,3 +68,11 @@ $ python request_to_devman.py
 - Кроме логов, вы должны наблюдать надпись **Build succeeded**  
 
 В данной версии каждые 90 секунд бут будет писать в лог крайне информативные сообщения о том, что он жив и пытается достучаться до сайта
+
+
+### Запуск с использованием Docker
+
+```shell
+docker build -t devman-homework .
+docker run --rm -v 'pwd' -d devman-homework
+```
