@@ -1,1 +1,0 @@
-bot: python3 request_to_devman.py
