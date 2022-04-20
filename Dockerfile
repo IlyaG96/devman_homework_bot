@@ -1,7 +1,5 @@
 FROM python:3.9.10-alpine
 
-RUN mkdir "/usr/src/devman-homework"
-
 WORKDIR /usr/src/devman-homework
 COPY requirements.txt /usr/src/devman-homework/
 
