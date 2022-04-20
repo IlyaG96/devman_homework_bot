@@ -92,7 +92,7 @@ docker run -d --env-file ./.env devman-homework
 ```shell
 docker images
 ```
-Для завершения работы образа найдите в списке образов id своего образа (IMAGE ID) и выполните команду:
+Для удаления образа найдите в списке образов id своего образа (IMAGE ID) и выполните команду:
 ```shell
 docker rmi IMAGE_ID   
 ```
